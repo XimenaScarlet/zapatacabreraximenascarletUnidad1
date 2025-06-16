@@ -1,0 +1,78 @@
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":27}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":28}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":29}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":32}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":33}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":34}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":35}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":36}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":37}
+Err: 
+To: +528445404397
+Resp: {"error":"Your instance has been Stopped due to non-payment. you can activate this instance by extending your subscription. Payment information updates every 5 minutes."}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":38}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":39}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":40}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":41}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":42}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":43}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":44}
+Err: 
+To: +528445897405
+Resp: {"error":"Your instance has been Stopped due to non-payment. you can activate this instance by extending your subscription. Payment information updates every 5 minutes."}
+Err: 
+To: +528445404397
+Resp: {"error":"Your instance has been Stopped due to non-payment. you can activate this instance by extending your subscription. Payment information updates every 5 minutes."}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":2}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":3}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":4}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":5}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":6}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":7}
+Err: 
+To: +528445404397
+Resp: {"sent":"true","message":"ok","id":8}
+Err: 
