@@ -8,7 +8,6 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pepsi</title>
     <script>
-        // Aplica el modo oscuro lo antes posible según localStorage
         (function() {
             try {
                 var isDarkMode = localStorage.getItem('darkMode') !== null 
@@ -140,8 +139,6 @@ session_start();
         .product-card:hover::before {
             opacity: 1;
         }
-
-        /* Remove chatbot-related styles */
 
         .pepsi-bottle {
             width: 180px;
@@ -303,19 +300,15 @@ session_start();
     </style>
 </head>
 <body class="bg-black text-white font-sans min-h-screen">
-    <!-- Skip to main content -->
     <a href="#main-content" class="sr-only focus:not-sr-only">Ir al contenido principal</a>
 
-    <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-sm border-b border-white/10 transition-colors duration-300">
         <nav class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
-                <!-- Logo -->
                 <div class="flex-shrink-0">
                     <h1 class="text-3xl font-bold text-white tracking-wider">PEPSI</h1>
                 </div>
 
-                <!-- Navigation Links - Centered -->
                 <div class="hidden md:flex items-center justify-center flex-1 space-x-6">
                     <a href="products.php" class="text-white hover:text-pepsiBlue transition-colors">Productos</a>
                     <a href="contact.php" class="text-white hover:text-pepsiBlue transition-colors">Contacto</a>
@@ -323,7 +316,6 @@ session_start();
                     <a href="privacy.php" class="text-white hover:text-pepsiBlue transition-colors">Privacidad</a>
                 </div>
 
-                <!-- Right Icons -->
                 <div class="flex items-center space-x-4">
                     <a href="login.php" class="text-white hover:text-pepsiBlue transition-colors">
                         <i class="fas fa-user text-xl"></i>
@@ -331,14 +323,13 @@ session_start();
                     <button class="text-white hover:text-pepsiBlue transition-colors" id="darkModeToggle">
                         <i class="fas fa-moon text-xl"></i>
                     </button>
-                    <!-- Mobile Menu Button -->
+
                     <button class="md:hidden text-white hover:text-pepsiBlue transition-colors">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Mobile Menu (Hidden by default) -->
             <div class="md:hidden hidden pt-4 transform transition-all duration-300 ease-in-out opacity-0">
                 <div class="flex flex-col space-y-3">
                     <a href="products.php" class="text-white hover:text-pepsiBlue transition-colors">Productos</a>
@@ -350,12 +341,11 @@ session_start();
         </nav>
     </header>
 
-    <!-- Breadcrumb dinámico -->
     <nav aria-label="breadcrumb" class="w-full flex justify-center pt-24 pb-2">
         <ol class="flex items-center space-x-2 text-lg font-semibold breadcrumb-list" id="breadcrumb-list"></ol>
     </nav>
     <script>
-        // Breadcrumb real basado en historial de navegación (máx 8)
+
         (function() {
             const maxBreadcrumb = 8;
             const storageKey = 'pepsi_breadcrumb_history';
@@ -415,15 +405,12 @@ session_start();
             color: #004B93 !important;
         }
     </style>
-    <!-- Main Content -->
     <main id="main-content" class="pt-24 pb-16">
-        <!-- Hero Banner -->
         <div class="container mx-auto px-6 mb-16">
             <div class="relative banner-gradient rounded-2xl overflow-hidden border border-white/5 parallax-container" id="banner">
                 <div class="banner-shine"></div>
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(0,75,147,0.2),transparent_70%)]"></div>
                 <div class="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12 parallax-content">
-                    <!-- Text Content -->
                     <div class="space-y-6 text-center md:text-left">
                         <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
                             Refresca tu día<br>
@@ -442,7 +429,6 @@ session_start();
                             </a>
                         </div>
                     </div>
-                    <!-- Animated Bottle -->
                     <div class="relative flex justify-center">
                         <div class="pepsi-bottle banner-bottle w-48 md:w-64 hover:scale-105 transition-transform duration-300 parallax-move">
                             <div class="bottle-neck">
@@ -458,7 +444,6 @@ session_start();
                     </div>
                 </div>
                 
-                <!-- Decorative Elements -->
                 <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
                     <div class="absolute top-1/2 left-1/4 w-24 h-24 bg-pepsiBlue/20 rounded-full blur-2xl"></div>
                     <div class="absolute bottom-1/4 right-1/3 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
@@ -466,10 +451,8 @@ session_start();
             </div>
         </div>
 
-        <!-- Product Grid -->
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Zero Azúcar -->
                 <div class="product-card flex flex-col items-center text-center p-6">
                     <a href="#" class="block">
                         <div class="pepsi-bottle">
@@ -491,7 +474,6 @@ session_start();
                     </a>
                 </div>
 
-                <!-- Zero Azúcar Zero Cafeína -->
                 <div class="product-card flex flex-col items-center text-center p-6">
                     <a href="#" class="block">
                         <div class="pepsi-bottle">
@@ -513,7 +495,6 @@ session_start();
                     </a>
                 </div>
 
-                <!-- Zero Azúcar Lima -->
                 <div class="product-card flex flex-col items-center text-center p-6">
                     <a href="#" class="block">
                         <div class="pepsi-bottle lime">
@@ -535,7 +516,6 @@ session_start();
                     </a>
                 </div>
 
-                <!-- Original -->
                 <div class="product-card flex flex-col items-center text-center p-6">
                     <a href="#" class="block">
                         <div class="pepsi-bottle">
@@ -559,7 +539,6 @@ session_start();
         </div>
     </main>
 
-    <!-- Chat Bubble Button -->
     <button id="chat-bubble-btn"
         class="fixed bottom-4 right-4 z-[9999] w-16 h-16 rounded-full bg-pepsiBlue text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition-all"
         aria-label="Abrir chat"
@@ -567,7 +546,6 @@ session_start();
         <i class="fas fa-comment-dots"></i>
     </button>
 
-    <!-- Chatbase Agent Bubble (hidden by default) -->
     <iframe
         id="chat-iframe"
         src="https://www.chatbase.co/chatbot-iframe/IOgCBWRXBPOCAXtMrfEzy"
@@ -576,14 +554,11 @@ session_start();
         style="max-height: 80vh; max-width: calc(100% - 2rem); display: none;"
     ></iframe>
 
-    <!-- Footer -->
     <footer class="bg-black text-white py-8">
         <div class="container mx-auto px-6">
             <div class="flex flex-col items-center justify-between space-y-8">
-                <!-- Logo -->
                 <div class="text-4xl font-bold blink-pepsi">PEPSI</div>
 
-                <!-- Social Links -->
                 <div class="flex space-x-8">
                     <a href="#" class="text-white hover:text-pepsiBlue transition-colors">
                         <i class="fab fa-twitter text-2xl"></i>
@@ -596,16 +571,11 @@ session_start();
                     </a>
                 </div>
 
-                <!-- Footer Links -->
                 <div id="footer-links" class="flex flex-wrap justify-center gap-8 text-sm uppercase tracking-wider">
-                    <a href="#" class="footer-link text-white hover:text-pepsiBlue transition-colors">Mapa del sitio</a>
-                    <a href="#" class="footer-link text-white hover:text-pepsiBlue transition-colors">Bases legales</a>
-                    <a href="#" class="footer-link text-white hover:text-pepsiBlue transition-colors">Privacidad</a>
                     <a href="contact.php" class="footer-link text-white hover:text-pepsiBlue transition-colors">Contacto</a>
                     <a href="faq.php" class="footer-link text-white hover:text-pepsiBlue transition-colors">FAQ</a>
                 </div>
 
-                <!-- Copyright -->
                 <div class="text-sm text-gray-500">
                     © 2022 PEPSICO, INC.
                 </div>
@@ -614,20 +584,16 @@ session_start();
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Theme management
             const darkModeToggle = document.getElementById('darkModeToggle');
             const moonIcon = darkModeToggle.querySelector('.fa-moon, .fa-sun');
             let isDarkMode = localStorage.getItem('darkMode') !== null 
                 ? localStorage.getItem('darkMode') === 'true' 
-                : true; // Default to dark mode
-
+                : true;
             function updateTheme() {
-                // Cambia clases y estilos para modo claro/oscuro
                 document.body.classList.toggle('dark-mode', isDarkMode);
                 document.body.style.backgroundColor = isDarkMode ? '#000000' : '#ffffff';
                 document.body.style.color = isDarkMode ? '#ffffff' : '#000000';
 
-                // Header
                 const header = document.querySelector('header');
                 if (header) {
                     header.classList.toggle('bg-black/90', isDarkMode);
@@ -636,14 +602,12 @@ session_start();
                     header.classList.toggle('border-black/10', !isDarkMode);
                 }
 
-                // Logo
                 const logo = document.querySelector('h1');
                 if (logo) {
                     logo.classList.toggle('text-white', isDarkMode);
                     logo.classList.toggle('text-black', !isDarkMode);
                 }
 
-                // Navbar links
                 const navLinks = document.querySelectorAll('a:not(.info-link):not(.blink-pepsi), button:not(.info-link)');
                 navLinks.forEach(link => {
                     link.classList.toggle('text-white', isDarkMode);
@@ -652,26 +616,22 @@ session_start();
                     link.classList.toggle('hover:text-black', !isDarkMode);
                 });
 
-                // Product cards
                 const productCards = document.querySelectorAll('.product-card');
                 productCards.forEach(card => {
                     card.style.backgroundColor = isDarkMode ? 'transparent' : 'rgba(0,0,0,0.05)';
                 });
 
-                // Info links
                 const infoLinks = document.querySelectorAll('.info-link');
                 infoLinks.forEach(link => {
                     link.style.color = '#004B93';
                 });
 
 
-                // Hero description color
                 const heroDesc = document.getElementById('hero-desc');
                 if (heroDesc) {
                     heroDesc.style.color = isDarkMode ? '#d1d5db' : '#222';
                 }
 
-                // Cambia icono luna/sol
                 if (moonIcon) {
                     if (isDarkMode) {
                         moonIcon.classList.add('fa-moon');
@@ -682,7 +642,6 @@ session_start();
                     }
                 }
 
-                // Footer links color blanco en modo claro
                 const footerLinks = document.querySelectorAll('.footer-link');
                 if (footerLinks.length) {
                     footerLinks.forEach(link => {
@@ -691,19 +650,14 @@ session_start();
                 }
             }
 
-            // Inicializa el tema
             updateTheme();
 
-            // Toggle dark mode
             darkModeToggle.addEventListener('click', () => {
                 isDarkMode = !isDarkMode;
                 localStorage.setItem('darkMode', isDarkMode);
                 updateTheme();
             });
 
-
-
-            // Parallax effect for banner
             const banner = document.getElementById('banner');
             const parallaxElements = banner.querySelectorAll('.parallax-move');
 
@@ -731,7 +685,6 @@ session_start();
                 });
             });
 
-            // Mobile menu toggle
             const mobileMenuButton = document.querySelector('.md\\:hidden .fa-bars').parentElement;
             const mobileMenu = document.querySelector('.md\\:hidden.hidden.pt-4');
             
@@ -761,7 +714,6 @@ session_start();
         });
     </script>
     <script>
-        // Chat bubble logic
         const chatBtn = document.getElementById('chat-bubble-btn');
         const chatIframe = document.getElementById('chat-iframe');
         let chatOpen = false;
@@ -769,12 +721,10 @@ session_start();
         chatBtn.addEventListener('click', () => {
             chatOpen = !chatOpen;
             chatIframe.style.display = chatOpen ? 'block' : 'none';
-            // Optional: change icon when open/closed
             chatBtn.querySelector('i').classList.toggle('fa-comment-dots', !chatOpen);
             chatBtn.querySelector('i').classList.toggle('fa-times', chatOpen);
         });
 
-        // Optional: close chat if click outside iframe or button
         document.addEventListener('click', (e) => {
             if (chatOpen && !chatIframe.contains(e.target) && !chatBtn.contains(e.target)) {
                 chatOpen = false;
@@ -784,7 +734,6 @@ session_start();
             }
         });
 
-        // Prevent closing when clicking inside iframe or button
         chatIframe.addEventListener('click', e => e.stopPropagation());
         chatBtn.addEventListener('click', e => e.stopPropagation());
     </script>
