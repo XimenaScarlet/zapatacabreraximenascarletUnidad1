@@ -6,7 +6,6 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
-// Process contact form
 $contact_success = false;
 $contact_error = '';
 
@@ -26,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'scarletgirl145@gmail.com';
-        $mail->Password = 'iqjxlforynphlthk';
+        $mail->Password = '';
         $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
         $mail->CharSet = 'UTF-8';
@@ -73,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
             padding: 0 20px;
         }
 
-        /* Header */
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -131,7 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
             transform: translateY(-1px);
         }
 
-        /* Main Content */
         .main-content {
             padding: 60px 0;
         }
@@ -403,7 +400,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <nav class="nav">
             <div class="logo">Pepsi</div>
@@ -415,10 +411,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
         </nav>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Hero Section -->
             <section class="hero-section">
                 <h1 class="hero-title">Contáctanos</h1>
                 <p class="hero-subtitle">
@@ -426,9 +420,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
                 </p>
             </section>
 
-            <!-- Contact Section -->
             <section class="contact-section">
-                <!-- Contact Information -->
                 <div class="contact-info">
                     <h3>Información de Contacto</h3>
                     <p>¡Escríbenos o inicia un chat en vivo!</p>
@@ -454,8 +446,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
                         </div>
                     </div>
                 </div>
-
-                <!-- Contact Form -->
                 <div class="contact-form">
                     <?php if ($contact_success): ?>
                         <div class="message success">
@@ -489,7 +479,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-logo">saberpepsi</div>
         <div class="footer-links">
