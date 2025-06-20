@@ -344,13 +344,11 @@ if (!isset($_SESSION['empleado_id'])) {
             }
         }
 
-        /* Food item specific backgrounds */
         .food-1 { background: linear-gradient(135deg, #fff3cd, #ffeaa7); }
         .food-2 { background: linear-gradient(135deg, #ffe8e8, #ffb3b3); }
         .food-3 { background: linear-gradient(135deg, #fff8dc, #f4e4bc); }
         .food-4 { background: linear-gradient(135deg, #e8f5e8, #c8e6c9); }
 
-        /* Restaurant specific backgrounds */
         .restaurant-1 { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
         .restaurant-2 { background: linear-gradient(135deg, #f3e5f5, #e1bee7); }
         .restaurant-3 { background: linear-gradient(135deg, #fff3e0, #ffcc80); }
@@ -359,7 +357,6 @@ if (!isset($_SESSION['empleado_id'])) {
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <div class="sidebar">
             <a href="error.php" class="sidebar-icon" title="Inicio"><i class="fas fa-home"></i></a>
             <a href="error.php" class="sidebar-icon" title="Buscar"><i class="fas fa-search"></i></a>
@@ -373,10 +370,8 @@ if (!isset($_SESSION['empleado_id'])) {
                 </button>
             </form>
         </div>
-
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Header -->
+
             <div class="header" style="justify-content:center;">
                 <div class="search-container" style="margin:0 auto;">
                     <i class="fas fa-search search-icon"></i>
@@ -390,9 +385,7 @@ if (!isset($_SESSION['empleado_id'])) {
                 </a>
             </div>
 
-            <!-- Cards de Refrescos Pepsi desde carpeta img -->
             <div class="food-grid">
-                <!-- Pepsi Original -->
                 <div class="food-card food-1">
                     <div class="food-image" style="background-image:url('/saberpepsi/img/pepsi-original.png');background-color:#fff;"></div>
                     <div class="food-name flex flex-col items-center">
@@ -410,7 +403,6 @@ if (!isset($_SESSION['empleado_id'])) {
                     <div class="food-description">El sabor original que ha refrescado generaciones. Una experiencia única en cada sorbo.</div>
                     <div class="food-price mt-3 w-full">$18.00 MXN</div>
                 </div>
-                <!-- Pepsi Zero Sugar -->
                 <div class="food-card food-2">
                     <div class="food-image" style="background-image:url('/saberpepsi/img/pepsi-zero.png');background-color:#fff;"></div>
                     <div class="food-name flex flex-col items-center">
@@ -428,7 +420,6 @@ if (!isset($_SESSION['empleado_id'])) {
                     <div class="food-description">Todo el sabor Pepsi que amas, sin azúcar. Perfecto para un estilo de vida saludable.</div>
                     <div class="food-price mt-3 w-full">$19.00 MXN</div>
                 </div>
-                <!-- Pepsi Zero Cafeína -->
                 <div class="food-card food-3">
                     <div class="food-image" style="background-image:url('/saberpepsi/img/pepsi-zero-cafeina.png');background-color:#fff;"></div>
                     <div class="food-name flex flex-col items-center">
@@ -446,7 +437,6 @@ if (!isset($_SESSION['empleado_id'])) {
                     <div class="food-description">El refrescante sabor Pepsi sin cafeína. Perfecto para cualquier momento del día.</div>
                     <div class="food-price mt-3 w-full">$19.50 MXN</div>
                 </div>
-                <!-- Pepsi Cherry -->
                 <div class="food-card food-4">
                     <div class="food-image" style="background-image:url('/saberpepsi/img/pepsi-cherry.png');background-color:#fff;"></div>
                     <div class="food-name flex flex-col items-center">
@@ -464,7 +454,6 @@ if (!isset($_SESSION['empleado_id'])) {
                     <div class="food-description">Una deliciosa combinación de Pepsi con sabor a cereza. Una explosión de sabor.</div>
                     <div class="food-price mt-3 w-full">$20.00 MXN</div>
                 </div>
-                <!-- Pepsi Lime -->
                 <div class="food-card food-1">
                     <div class="food-image" style="background-image:url('/saberpepsi/img/pepsi-lime.png');background-color:#fff;"></div>
                     <div class="food-name flex flex-col items-center">
@@ -482,7 +471,6 @@ if (!isset($_SESSION['empleado_id'])) {
                     <div class="food-description">El refrescante sabor de Pepsi con un toque de lima. Perfecto para el verano.</div>
                     <div class="food-price mt-3 w-full">$21.00 MXN</div>
                 </div>
-                <!-- Pepsi Mango -->
                 <div class="food-card food-2">
                     <div class="food-image" style="background-image:url('/saberpepsi/img/pepsi-mango.png');background-color:#fff;"></div>
                     <div class="food-name flex flex-col items-center">
@@ -505,11 +493,9 @@ if (!isset($_SESSION['empleado_id'])) {
     </div>
 
     <script>
-        // Fecha actual en español
         const dateDisplay = document.querySelector('.date-display');
         const currentDate = new Date();
         const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-        // Solo muestra la fecha actual, no una fija
         dateDisplay.textContent = `${currentDate.getDate()} de ${meses[currentDate.getMonth()]} de ${currentDate.getFullYear()}`;
     </script>
 </body>
