@@ -4,23 +4,16 @@ $success = '';
 $showCodePopup = false;
 $codigo = null;
 
-// PHPMailer para envío de correos
 require_once __DIR__ . '/../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$host = 'sql303.byetcluster.com';
-$db = 'ezyro_39184205_saberpepsi';
-$user = 'ezyro_39184205';
-$pass = 'ae6b6e7c9';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Conexión a la base de datos
     $conn = new mysqli($host, $user, $pass, $db);
     if ($conn->connect_error) {
         $error = 'Error de conexión a la base de datos.';
     } else {
-        // Recibe los datos del formulario
+
         $usuario = trim($_POST['username'] ?? '');
         $nombre = trim($_POST['fullname'] ?? '');
         $correo = trim($_POST['email'] ?? '');
@@ -30,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $metodo = $_POST['verificationMethod'] ?? '';
         $imagen = null;
 
-        // Validar que usuario, correo y teléfono no existan
         $stmt = $conn->prepare("SELECT usuario, correo, numero FROM empleados WHERE usuario = ? OR correo = ? OR numero = ?");
         $stmt->bind_param('sss', $usuario, $correo, $numero);
         $stmt->execute();
@@ -51,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($password !== $confirmPassword) {
             $error = 'Las contraseñas no coinciden.';
         } else {
-            // Procesar imagen de perfil (obligatoria)
             if (empty($_FILES['imagen']) || !isset($_FILES['imagen']['tmp_name']) || $_FILES['imagen']['error'] !== UPLOAD_ERR_OK) {
                 $error = 'La foto de perfil es obligatoria.';
             } else {
@@ -65,29 +56,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'Error al subir la imagen de perfil.';
                 }
             }
-            // Encriptar contraseña
+
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $codigo = rand(100000, 999999);
             $verificado = 0;
-            // Insertar en la base de datos
             $stmt2 = $conn->prepare("INSERT INTO empleados (usuario, nombre, correo, numero, password, imagen, codigo_confirmacion, verificado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt2->bind_param('ssssssii', $usuario, $nombre, $correo, $numero, $hash, $imagen, $codigo, $verificado);
             if ($stmt2->execute()) {
                 $success = '¡Registro exitoso! Revisa tu correo o WhatsApp para el código de verificación.';
                 $showCodePopup = true;
-                // Enviar código por correo si corresponde
                 if ($metodo === 'email') {
                     $mail = new PHPMailer(true);
                     try {
                         $mail->isSMTP();
                         $mail->Host = 'smtp.gmail.com';
                         $mail->SMTPAuth = true;
-                        $mail->Username = 'scarletgirl145@gmail.com';
-                        $mail->Password = 'iqjxlforynphlthk';
+                        $mail->Username = '';
+                        $mail->Password = '';
                         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                         $mail->Port = 587;
                         $mail->CharSet = 'UTF-8';
-                        $mail->setFrom('scarletgirl145@gmail.com', 'Pepsi');
+                        $mail->setFrom('', 'Pepsi');
                         $mail->addAddress($correo);
                         $mail->Subject = 'Código de confirmación Pepsi';
                         $mail->Body = "Tu código de confirmación es: $codigo";
@@ -98,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 } elseif ($metodo === 'whatsapp') {
                     $instance_id = 'instance124477';
-                    $token = 'h2nxn1htpbryg4of';
+                    $token = '';
                     $mensaje = "Tu código de confirmación Pepsi es: $codigo";
                     $numeroEnvio = preg_replace('/\D/', '', $numero);
                     if (strlen($numeroEnvio) == 10) {
@@ -150,8 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-
-// Validación de código de confirmación (formulario popup)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['codigo_confirmacion'])) {
     $codigoIngresado = trim($_POST['codigo_confirmacion']);
     $correo = trim($_POST['email'] ?? '');
@@ -159,10 +146,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['codigo_confirmacion']
     $usuario = trim($_POST['username'] ?? '');
     $tabla = 'empleados';
 
-    // Conexión a la base de datos
     $conn = new mysqli($host, $user, $pass, $db);
     if (!$conn->connect_error) {
-        // Buscar el código en la base de datos
         $where = [];
         $params = [];
         $types = '';
@@ -191,7 +176,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['codigo_confirmacion']
             if ($stmt->fetch()) {
                 if ($codigo_bd && $codigo_bd == $codigoIngresado) {
                     $stmt->close();
-                    // Actualiza el registro como verificado
                     $sql2 = "UPDATE $tabla SET verificado=1 WHERE $where_sql";
                     $stmt2 = $conn->prepare($sql2);
                     if ($stmt2) {
@@ -199,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['codigo_confirmacion']
                         $stmt2->execute();
                         $stmt2->close();
                     }
-                    // Redirigir a login.php después de confirmar
+
                     header('Location: login.php');
                     exit;
                 } else {
@@ -218,20 +202,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['codigo_confirmacion']
     }
 }
 
-// Manejo AJAX para registro
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
     header('Content-Type: application/json');
     $error = '';
     $success = '';
     $codigo = null;
 
-    // Conexión a la base de datos
     $conn = new mysqli($host, $user, $pass, $db);
     if ($conn->connect_error) {
         echo json_encode(['ok' => false, 'error' => 'Error de conexión a la base de datos.']);
         exit;
     }
-    // Recibe los datos del formulario
     $usuario = trim($_POST['username'] ?? '');
     $nombre = trim($_POST['fullname'] ?? '');
     $correo = trim($_POST['email'] ?? '');
@@ -239,8 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
     $password = $_POST['password'] ?? '';
     $metodo = $_POST['verificationMethod'] ?? '';
     $imagen = null;
-
-    // Validar que usuario, correo y teléfono no existan
+¿
     $stmt = $conn->prepare("SELECT usuario, correo, numero FROM empleados WHERE usuario = ? OR correo = ? OR numero = ?");
     $stmt->bind_param('sss', $usuario, $correo, $numero);
     $stmt->execute();
@@ -268,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
         $conn->close();
         exit;
     }
-    // Procesar imagen de perfil (obligatoria)
+
     if (empty($_FILES['imagen']) || $_FILES['imagen']['error'] !== UPLOAD_ERR_OK) {
         $error = 'La foto de perfil es obligatoria.';
     } else {
@@ -282,27 +262,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             $error = 'Error al subir la imagen de perfil.';
         }
     }
-    // Encriptar contraseña
+
     $hash = password_hash($password, PASSWORD_DEFAULT);
     $codigo = rand(100000, 999999);
     $verificado = 0;
-    // Insertar en la base de datos
     $stmt2 = $conn->prepare("INSERT INTO empleados (usuario, nombre, correo, numero, password, imagen, codigo_confirmacion, verificado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt2->bind_param('ssssssii', $usuario, $nombre, $correo, $numero, $hash, $imagen, $codigo, $verificado);
     if ($stmt2->execute()) {
-        // Enviar código por correo si corresponde
         if ($metodo === 'email') {
             $mail = new PHPMailer(true);
             try {
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
-                $mail->Username = 'scarletgirl145@gmail.com';
-                $mail->Password = 'iqjxlforynphlthk';
+                $mail->Username = '';
+                $mail->Password = '';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = 587;
                 $mail->CharSet = 'UTF-8';
-                $mail->setFrom('scarletgirl145@gmail.com', 'Pepsi');
+                $mail->setFrom('', 'Pepsi');
                 $mail->addAddress($correo);
                 $mail->Subject = 'Código de confirmación Pepsi';
                 $mail->Body = "Tu código de confirmación es: $codigo";
@@ -431,7 +409,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             border-color: #004B93;
         }
 
-        /* Verification method styles */
         .verification-method {
             border-color: rgba(255, 255, 255, 0.2);
             position: relative;
@@ -462,7 +439,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             background: rgba(0, 75, 147, 0.1);
         }
 
-        /* Light mode adjustments */
         body.light-mode .verification-method {
             border-color: rgba(0, 0, 0, 0.2);
         }
@@ -475,7 +451,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             background: rgba(0, 0, 0, 0.05);
         }
 
-        /* Breadcrumb styles */
         body.light-mode .breadcrumb-list li,
         body.light-mode .breadcrumb-list li.text-white,
         body.light-mode .breadcrumb-list li[aria-current="page"] {
@@ -493,13 +468,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
         .blink-pepsi {
             animation: blinkColor 1.5s linear infinite;
         }
-        /* Footer links always white, even in light mode */
+
         body.light-mode footer a.text-white {
             color: #fff !important;
         }
     </style>
     <script>
-        // Aplica el modo oscuro lo antes posible según localStorage
+
         (function() {
             try {
                 var isDarkMode = localStorage.getItem('darkMode') !== null 
@@ -519,13 +494,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
     </script>
 </head>
 <body class="bg-black text-white font-sans min-h-screen flex flex-col items-center justify-center py-12">
-    <!-- Navbar centrado con modo oscuro/claro a la derecha -->
+
     <nav class="w-full bg-black py-4 px-8 flex items-center justify-between shadow-md fixed top-0 left-0 z-40">
-        <!-- Logo a la izquierda -->
+
         <div class="flex items-center flex-shrink-0">
             <a href="index.php" class="text-2xl font-bold text-pepsiBlue tracking-wider">PEPSI</a>
         </div>
-        <!-- Enlaces centrados -->
+
         <div class="flex-1 flex items-center justify-center space-x-8">
             <a href="index.php" class="text-white hover:text-pepsiBlue transition-colors">Inicio</a>
             <a href="products.php" class="text-white hover:text-pepsiBlue transition-colors">Productos</a>
@@ -533,24 +508,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             <a href="faq.php" class="text-white hover:text-pepsiBlue transition-colors">FAQ</a>
             <a href="privacy.php" class="text-white hover:text-pepsiBlue transition-colors">Privacidad</a>
         </div>
-        <!-- Botón modo oscuro/claro a la derecha -->
+
         <div class="flex items-center space-x-4">
             <button id="darkModeToggle" class="text-white hover:text-pepsiBlue transition-colors" aria-label="Cambiar modo oscuro/claro">
                 <i class="fas fa-moon text-xl"></i>
             </button>
         </div>
     </nav>
-    <!-- Breadcrumb centrado y funcional con historial -->
     <nav aria-label="breadcrumb" class="w-full flex justify-center pt-24 pb-2">
         <ol class="flex items-center space-x-2 text-lg font-semibold breadcrumb-list" id="breadcrumb-list">
-            <!-- El breadcrumb se llenará dinámicamente -->
         </ol>
     </nav>
     <script>
-        // Breadcrumb dinámico basado en historial
+
         (function() {
             const breadcrumbList = document.getElementById('breadcrumb-list');
-            // Obtén la página anterior del historial, si existe
+
             let prev = document.referrer;
             let prevLabel = '';
             let prevHref = '';
@@ -558,10 +531,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             if (prev) {
                 try {
                     const url = new URL(prev);
-                    // Solo si es del mismo dominio
+
                     if (url.hostname === window.location.hostname) {
                         prevHref = url.pathname.split('/').pop();
-                        // Etiquetas personalizadas según la ruta
+
                         if (prevHref === 'index.php' || prevHref === '') prevLabel = 'Inicio';
                         else if (prevHref === 'products.php') prevLabel = 'Productos';
                         else if (prevHref === 'contact.php') prevLabel = 'Contacto';
@@ -581,11 +554,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             html += `<li class="text-white" aria-current="page">Registro</li>`;
             breadcrumbList.innerHTML = html;
         })();
-
-        // ...existing code...
     </script>
     <style>
-        /* ...existing styles... */
+
         body.light-mode .breadcrumb-list li,
         body.light-mode .breadcrumb-list li.text-white,
         body.light-mode .breadcrumb-list li[aria-current="page"] {
@@ -595,13 +566,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             color: #004B93 !important;
         }
     </style>
-    <!-- Logo y subtítulo centrados arriba de todo -->
     <div class="w-full flex flex-col items-center justify-center mt-8 mb-4">
         <h1 class="text-4xl font-bold text-white tracking-wider">PEPSI</h1>
         <p class="text-gray-400 mt-2">Crear Cuenta</p>
     </div>
 
-    <!-- Popups dinámicos -->
     <div id="popupError" class="fixed inset-0 flex items-center justify-center z-50 hidden">
         <div class="bg-white text-red-600 rounded-lg shadow-lg p-6 flex flex-col items-center relative max-w-xs w-full">
             <button onclick="document.getElementById('popupError').style.display='none'" class="absolute top-2 right-2 text-xl text-red-400 hover:text-red-600">&times;</button>
@@ -619,7 +588,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
         </div>
     </div>
 
-    <!-- Popup de código de confirmación: SIEMPRE en el DOM, oculto por defecto -->
     <div id="popupCode" class="fixed inset-0 flex items-center justify-center z-50" style="display:none;">
         <div class="bg-white text-black rounded-lg shadow-lg p-6 flex flex-col items-center relative max-w-xs w-full">
             <button onclick="document.getElementById('popupCode').style.display='none'" class="absolute top-2 right-2 text-xl text-gray-400 hover:text-red-600">&times;</button>
@@ -638,11 +606,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
         </div>
     </div>
 
-    <!-- Contenedor centrado del formulario -->
     <div class="w-full max-w-2xl p-8 flex flex-col items-center justify-center">
-        <!-- Registration Form -->
+
         <form class="space-y-6 w-full" id="registerForm" method="post" enctype="multipart/form-data" autocomplete="off">
-            <!-- Profile Image Upload -->
+
             <div class="text-center space-y-2">
                 <label for="profileImage" class="block text-sm font-medium text-gray-300">Foto de perfil</label>
                 <div class="image-upload mx-auto w-32 h-32 rounded-full flex items-center justify-center cursor-pointer relative overflow-hidden group" id="imageUploadContainer">
@@ -660,7 +627,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Username -->
+
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-300 mb-2">Usuario</label>
                     <input type="text" id="username" name="username" required 
@@ -669,7 +636,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                         autocomplete="username">
                 </div>
 
-                <!-- Full Name -->
                 <div>
                     <label for="fullname" class="block text-sm font-medium text-gray-300 mb-2">Nombre Completo</label>
                     <input type="text" id="fullname" name="fullname" required 
@@ -678,7 +644,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                         autocomplete="name">
                 </div>
 
-                <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Correo electrónico</label>
                     <input type="email" id="email" name="email" required 
@@ -687,7 +652,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                         autocomplete="email">
                 </div>
 
-                <!-- Phone -->
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-300 mb-2">WhatsApp</label>
                     <input type="tel" id="phone" name="phone" required 
@@ -698,7 +662,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                         title="Debe ser un número de 10 dígitos">
                 </div>
 
-                <!-- Password -->
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Contraseña</label>
                     <input type="password" id="password" name="password" required 
@@ -710,7 +673,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                         title="Debe contener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y números">
                 </div>
 
-                <!-- Confirm Password -->
                 <div>
                     <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-2">Confirmar Contraseña</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" required 
@@ -721,7 +683,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                 </div>
             </div>
 
-            <!-- Verification Method -->
             <div class="space-y-3">
                 <label class="block text-sm font-medium text-gray-300">Método de verificación</label>
                 <div class="grid grid-cols-2 gap-4">
@@ -742,9 +703,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                 </div>
             </div>
 
-            <!-- reCAPTCHA -->
             <div class="flex justify-center">
-                <div class="g-recaptcha" data-sitekey="6LcKmlkrAAAAAAIA5iYsmEQ8K5fBpIPZycQyGSqj"></div>
+                <div class="g-recaptcha" data-sitekey=""></div>
             </div>
 
             <div class="space-y-6">
@@ -770,7 +730,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             </div>
         </form>
 
-        <!-- Back to Home -->
         <div class="text-center mt-8">
             <a href="index.php" class="text-gray-400 hover:text-white transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>
@@ -780,7 +739,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
     </div>
 
     <script>
-        // Theme management
+
         const isDarkMode = localStorage.getItem('darkMode') !== null 
             ? localStorage.getItem('darkMode') === 'true' 
             : true;
@@ -808,8 +767,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                     el.classList.add('text-gray-600');
                 });
                 imageUpload.style.borderColor = 'rgba(0, 0, 0, 0.2)';
-                
-                // Update verification method icons in light mode
+            
                 document.querySelectorAll('.verification-method i').forEach(icon => {
                     icon.classList.remove('text-gray-400');
                     icon.classList.add('text-gray-600');
@@ -822,17 +780,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             }
         }
 
-        // Apply initial theme
         updateTheme();
 
-        // Listen for theme changes
         window.addEventListener('storage', (e) => {
             if (e.key === 'darkMode') {
                 location.reload();
             }
         });
 
-        // Image upload preview and open file dialog on click
         document.addEventListener('DOMContentLoaded', function() {
             const profileImage = document.getElementById('profileImage');
             const imagePreview = document.getElementById('imagePreview');
@@ -852,15 +807,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                     }
                 });
             }
-            // Hacer clic en el área de imagen abre el selector de archivos
+
             if (imageUploadContainer && profileImage) {
                 imageUploadContainer.addEventListener('click', function(e) {
-                    // Evitar que el click en el input file lo vuelva a abrir
+
                     if (e.target !== profileImage) {
                         profileImage.click();
                     }
                 });
-                // También permitir abrir al hacer click en el placeholder
+
                 if (uploadPlaceholder) {
                     uploadPlaceholder.addEventListener('click', function(e) {
                         e.stopPropagation();
@@ -869,19 +824,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                 }
             }
         });
-
-        // Form validation and AJAX submit
         const form = document.getElementById('registerForm');
         const imageError = document.getElementById('imageError');
         const profileImage = document.getElementById('profileImage');
-        // ...existing code...
+
 
         form.addEventListener('submit', function(e) {
             imageError.classList.add('hidden');
             document.getElementById('imageUploadContainer').classList.remove('border-red-500');
             let hasErrors = false;
 
-            // Validar imagen (obligatoria)
             if (!profileImage.files.length) {
                 e.preventDefault();
                 imageError.classList.remove('hidden');
@@ -896,7 +848,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                 document.getElementById('imageUploadContainer').scrollIntoView({behavior: 'smooth', block: 'center'});
                 return;
             }
-            // Validar usuario, correo y teléfono únicos
+
             if (usernameInput.classList.contains('border-red-500')) {
                 e.preventDefault();
                 var popupErrorMsg = document.getElementById('popupErrorMsg');
@@ -930,12 +882,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                 phoneInput.focus();
                 return;
             }
-            // Validar de nuevo antes de enviar (por si el usuario no sale de los campos)
             if (!usernameInput.value.trim() || !emailInput.value.trim() || !phoneInput.value.trim()) {
                 e.preventDefault();
                 return;
             }
-            // Validar contraseñas
+
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('confirmPassword');
             if (passwordInput.value !== confirmPasswordInput.value) {
@@ -944,19 +895,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             } else {
                 confirmPasswordInput.classList.remove('border-red-500');
             }
-            // Validar método de verificación
+
             const metodo = document.querySelector('input[name="verificationMethod"]:checked');
             if (!metodo) {
                 alert('Selecciona un método de verificación');
                 hasErrors = true;
             }
-            // Validar reCAPTCHA
             const captcha = document.querySelector('.g-recaptcha-response')?.value;
             if (!captcha) {
                 alert('Completa el captcha');
                 hasErrors = true;
             }
-            // No enviar si hay errores de usuario, correo o teléfono
+
             const usernameError = document.getElementById('usernameError')?.innerText;
             const emailError = document.getElementById('emailError')?.innerText;
             const phoneError = document.getElementById('phoneError')?.innerText;
@@ -968,7 +918,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
 
             if (hasErrors) return;
 
-            // Enviar por AJAX a la ruta correcta (empleados.php)
             const formData = new FormData();
             formData.append('nuevo', '1');
             formData.append('username', form.username.value);
@@ -982,7 +931,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             if (profileImage.files.length) {
                 formData.append('imagen', profileImage.files[0]);
             }
-            // reCAPTCHA v2
+
             formData.append('g-recaptcha-response', captcha);
 
             fetch('empleados.php', {
@@ -1013,10 +962,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                     window._user_registro = form.username.value;
                     window._metodo_registro = metodo.value;
                 } else {
-                    // Solo mostrar popup si es un error inesperado, no por usuario/correo/numero duplicado
+
                     if (resp.error &&
                         resp.error.match(/usuario ya est[áa] registrado|correo ya est[áa] registrado|n[uú]mero ya est[áa] registrado/i)) {
-                        // No mostrar popup, solo dejar el mensaje en el campo
+
                     } else {
                         document.getElementById('popupErrorMsg').innerText = resp.error || 'Error desconocido';
                         document.getElementById('popupError').style.display = 'flex';
@@ -1029,8 +978,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             });
         });
 
-        // AJAX para confirmar código
-        // Solo agregar el listener si existe el formulario
         const codeForm = document.getElementById('codeForm');
         if (codeForm) {
             codeForm.addEventListener('submit', function(e) {
@@ -1054,7 +1001,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                         document.getElementById('codeError').classList.add('hidden');
                         document.getElementById('codeSuccess').classList.remove('hidden');
                         document.getElementById('codeSuccess').innerText = '¡Cuenta confirmada!';
-                        // Redirigir a login.php después de 2 segundos
+
                         setTimeout(() => {
                             window.location.href = 'login.php';
                         }, 2000);
@@ -1072,7 +1019,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             });
         }
 
-        // Dark mode toggle logic
         const darkModeToggle = document.getElementById('darkModeToggle');
         const moonIcon = darkModeToggle.querySelector('.fa-moon, .fa-sun');
         let _isDarkMode = localStorage.getItem('darkMode') !== null 
@@ -1095,9 +1041,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             localStorage.setItem('darkMode', _isDarkMode);
             updateDarkModeIcon();
             location.reload();
-        });
-
-        // --- Validación de existencia de usuario, correo y teléfono ---
+        });+
         function checkFieldExists(field, value, callback) {
             if (!value) {
                 callback(false, '');
@@ -1121,7 +1065,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             });
         }
 
-        // Mensajes de error para cada campo
         function showFieldError(fieldId, msg) {
             let el = document.getElementById(fieldId + 'Error');
             if (!el) {
@@ -1135,7 +1078,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             el.style.display = msg ? 'block' : 'none';
         }
 
-        // Deshabilita el botón de registro si hay errores o si no hay imagen
         function updateRegisterButtonState() {
             const btn = form.querySelector('button[type="submit"]');
             const errors = [
@@ -1143,24 +1085,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                 document.getElementById('emailError')?.innerText,
                 document.getElementById('phoneError')?.innerText
             ];
-            // Nueva validación: imagen obligatoria
+
             const hasImage = profileImage.files.length > 0;
             btn.disabled = errors.some(msg => msg && msg.length > 0) || !hasImage;
             btn.classList.toggle('opacity-50', btn.disabled);
             btn.classList.toggle('cursor-not-allowed', btn.disabled);
         }
 
-        // Validar imagen al cambiar
         profileImage.addEventListener('change', function() {
             imageError.classList.add('hidden');
             document.getElementById('imageUploadContainer').classList.remove('border-red-500');
             updateRegisterButtonState();
         });
-
-        // Llamar al inicio para el estado inicial
         updateRegisterButtonState();
 
-        // Validar usuario
         const usernameInput = document.getElementById('username');
         usernameInput.addEventListener('blur', function() {
             const value = this.value.trim();
@@ -1177,7 +1115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             });
         });
 
-        // Validar correo
         const emailInput = document.getElementById('email');
         emailInput.addEventListener('blur', function() {
             const value = this.value.trim();
@@ -1194,7 +1131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             });
         });
 
-        // Validar teléfono
         const phoneInput = document.getElementById('phone');
         phoneInput.addEventListener('blur', function() {
             const value = this.value.trim();
@@ -1211,9 +1147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
             });
         });
 
-        // Validación final al enviar
         form.addEventListener('submit', function(e) {
-            // ...existing code...
             if (usernameInput.classList.contains('border-red-500')) {
                 var popupErrorMsg = document.getElementById('popupErrorMsg');
                 var popupError = document.getElementById('popupError');
@@ -1244,11 +1178,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
                 e.preventDefault();
                 return;
             }
-            // ...existing code...
+
         });
     </script>
 
-    <!-- Help Bubble Button and Popup -->
     <button class="help-bubble-btn" id="helpBubbleBtn" title="Ayuda"
         style="position: fixed; left: 32px; bottom: 32px; z-index: 9999; background: #004B93; color: #fff; border: none; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 4px 16px rgba(0,0,0,0.18); display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; transition: background 0.2s;">
         <i class="fas fa-question"></i>
@@ -1265,7 +1198,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
         <div style="font-size:0.95em;color:#666;">O utiliza el chat flotante para hablar con nuestro bot.</div>
     </div>
 
-    <!-- Chatbase Agent Bubble -->
     <button id="chat-bubble-btn"
         class="fixed bottom-4 right-4 z-[9999] w-16 h-16 rounded-full bg-pepsiBlue text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition-all"
         aria-label="Abrir chat"
@@ -1280,15 +1212,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
         style="max-height: 80vh; max-width: calc(100% - 2rem); display: none;"
     ></iframe>
 
-    <!-- Footer -->
     <footer class="bg-black text-white py-8 mt-12">
         <div class="container mx-auto px-6">
             <div class="flex flex-col items-center justify-between space-y-8">
                 <div class="text-4xl font-bold blink-pepsi">PEPSI</div>
                 <div class="flex flex-wrap justify-center gap-8 text-sm uppercase tracking-wider">
-                    <a href="#" class="text-white hover:text-pepsiBlue transition-colors">Condiciones de uso</a>
-                    <a href="#" class="text-white hover:text-pepsiBlue transition-colors">Bases legales</a>
-                    <a href="#" class="text-white hover:text-pepsiBlue transition-colors">Privacidad</a>
                     <a href="contact.php" class="text-white hover:text-pepsiBlue transition-colors">Contacto</a>
                     <a href="faq.php" class="text-white hover:text-pepsiBlue transition-colors">FAQ</a>
                     <a href="sitemap.php" class="text-white hover:text-pepsiBlue transition-colors">Mapa del sitio</a>
@@ -1304,7 +1232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
 
 <?php if (!empty($error)): ?>
 <script>
-    // Espera a que el DOM esté listo para mostrar el popup y resaltar el área de imagen si aplica
+
     window.addEventListener('DOMContentLoaded', function() {
         var popupErrorMsg = document.getElementById('popupErrorMsg');
         var popupError = document.getElementById('popupError');
@@ -1318,7 +1246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuevo'])) {
         if (errorMsg.toLowerCase().includes('foto de perfil')) {
             if (imgCont) imgCont.classList.add('border-red-500');
             if (imgErr) imgErr.classList.remove('hidden');
-            // Scroll al área de imagen para que el usuario lo vea
+
             if (imgCont && typeof imgCont.scrollIntoView === 'function') {
                 imgCont.scrollIntoView({behavior: 'smooth', block: 'center'});
             }
