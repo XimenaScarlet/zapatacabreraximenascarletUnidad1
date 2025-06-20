@@ -2,7 +2,6 @@
 session_start();
 $ya_logueado = isset($_SESSION['empleado_id']);
 if ($ya_logueado) {
-    // Redirige automáticamente si ya está logueado
     header('Location: /saberpepsi/dash.php');
     exit;
 }
@@ -19,7 +18,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $result = $stmt->get_result();
         if ($row = $result->fetch_assoc()) {
-            // Solo permite login si verificado es exactamente 1
             if (!isset($row['verificado']) || intval($row['verificado']) !== 1) {
                 $error = 'Tu cuenta aún no ha sido verificada. Por favor revisa tu correo o WhatsApp para el código de confirmación.';
             } elseif (password_verify($password, $row['password'])) {
@@ -28,7 +26,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['empleado_nombre'] = $row['nombre'];
                 $_SESSION['empleado_correo'] = $row['correo'];
                 $_SESSION['empleado_usuario'] = $row['usuario'];
-                // Redirección segura: usar header si es posible, si no, solo JS
                 if (!headers_sent()) {
                     header('Location: /saberpepsi/dash.php');
                     exit;
@@ -54,7 +51,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pepsi</title>
     <script>
-        // Aplica el modo oscuro lo antes posible según localStorage
         (function() {
             try {
                 var isDarkMode = localStorage.getItem('darkMode') !== null 
@@ -119,20 +115,16 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
         .blink-pepsi {
             animation: blinkColor 1.5s linear infinite;
         }
-        /* Footer links always white, even in light mode */
         body.light-mode footer a.text-white {
             color: #fff !important;
         }
     </style>
 </head>
 <body class="bg-black text-white font-sans min-h-screen flex flex-col items-center justify-center py-12">
-    <!-- Navbar centrado con modo oscuro/claro a la derecha -->
     <nav class="w-full bg-black py-4 px-8 flex items-center justify-between shadow-md fixed top-0 left-0 z-40">
-        <!-- Logo a la izquierda -->
         <div class="flex items-center flex-shrink-0">
             <a href="index.php" class="text-2xl font-bold text-pepsiBlue tracking-wider">PEPSI</a>
         </div>
-        <!-- Enlaces centrados -->
         <div class="flex-1 flex items-center justify-center space-x-8">
             <a href="index.php" class="text-white hover:text-pepsiBlue transition-colors">Inicio</a>
             <a href="products.php" class="text-white hover:text-pepsiBlue transition-colors">Productos</a>
@@ -140,7 +132,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="faq.php" class="text-white hover:text-pepsiBlue transition-colors">FAQ</a>
             <a href="privacy.php" class="text-white hover:text-pepsiBlue transition-colors">Privacidad</a>
         </div>
-        <!-- Botón modo oscuro/claro a la derecha -->
         <div class="flex items-center space-x-4">
             <button id="darkModeToggle" class="text-white hover:text-pepsiBlue transition-colors" aria-label="Cambiar modo oscuro/claro">
                 <i class="fas fa-moon text-xl"></i>
@@ -148,12 +139,10 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </nav>
 
-    <!-- Breadcrumb dinámico -->
     <nav aria-label="breadcrumb" class="w-full flex justify-center pt-24 pb-2">
         <ol class="flex items-center space-x-2 text-lg font-semibold breadcrumb-list" id="breadcrumb-list"></ol>
     </nav>
     <script>
-        // Breadcrumb real basado en historial de navegación (máx 8)
         (function() {
             const maxBreadcrumb = 8;
             const storageKey = 'pepsi_breadcrumb_history';
@@ -203,7 +192,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
             breadcrumbList.innerHTML = html;
         })();
 
-        // Dark/Light mode toggle
         document.addEventListener('DOMContentLoaded', function() {
             const darkModeToggle = document.getElementById('darkModeToggle');
             const moonIcon = darkModeToggle.querySelector('.fa-moon, .fa-sun');
@@ -220,7 +208,7 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     moonIcon.classList.toggle('fa-moon', isDarkMode);
                     moonIcon.classList.toggle('fa-sun', !isDarkMode);
                 }
-                // Breadcrumb color
+                
                 document.querySelectorAll('.breadcrumb-list li, .breadcrumb-list li[aria-current="page"]').forEach(li => {
                     li.style.color = isDarkMode ? '#fff' : '#222';
                 });
@@ -250,20 +238,17 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 
     <div class="w-full max-w-md p-8">
-        <!-- Logo -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-white tracking-wider">PEPSI</h1>
             <p class="text-gray-400 mt-2">Iniciar Sesión</p>
         </div>
 
-        <!-- Mostrar error si existe -->
         <?php if ($error): ?>
             <script>
                 alert("<?= addslashes($error) ?>");
             </script>
         <?php endif; ?>
 
-        <!-- Login Form -->
         <form class="space-y-6" method="post" autocomplete="off">
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Correo electrónico</label>
@@ -300,7 +285,7 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 </p>
             </div>
         </form>
-        <!-- Back to Home -->
+
         <div class="text-center mt-8">
             <a href="index.php" class="text-gray-400 hover:text-white transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>
@@ -309,7 +294,7 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <!-- Popup: Recuperar contraseña -->
+
     <div id="forgotPopup" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60 hidden">
         <div class="bg-white text-black rounded-lg shadow-lg p-6 flex flex-col items-center relative max-w-xs w-full">
             <button onclick="document.getElementById('forgotPopup').style.display='none'" class="absolute top-2 right-2 text-xl text-gray-400 hover:text-red-600">&times;</button>
@@ -336,7 +321,7 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
-    <!-- Popup: Código de recuperación -->
+
     <div id="recoveryCodePopup" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60 hidden">
         <div class="bg-white text-black rounded-lg shadow-lg p-6 flex flex-col items-center relative max-w-xs w-full">
             <button onclick="document.getElementById('recoveryCodePopup').style.display='none'" class="absolute top-2 right-2 text-xl text-gray-400 hover:text-red-600">&times;</button>
@@ -352,7 +337,7 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
-    <!-- Popup: Cambiar contraseña -->
+
     <div id="resetPasswordPopup" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60 hidden">
         <div class="bg-white text-black rounded-lg shadow-lg p-6 flex flex-col items-center relative max-w-xs w-full">
             <button onclick="document.getElementById('resetPasswordPopup').style.display='none'" class="absolute top-2 right-2 text-xl text-gray-400 hover:text-red-600">&times;</button>
@@ -371,7 +356,7 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <!-- Help Bubble Button and Popup -->
+
     <button class="help-bubble-btn" id="helpBubbleBtn" title="Ayuda"
         style="position: fixed; left: 32px; bottom: 32px; z-index: 9999; background: #004B93; color: #fff; border: none; border-radius: 50%; width: 60px; height: 60px; box-shadow: 0 4px 16px rgba(0,0,0,0.18); display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; transition: background 0.2s;">
         <i class="fas fa-question"></i>
@@ -388,7 +373,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
         <div style="font-size:0.95em;color:#666;">O utiliza el chat flotante para hablar con nuestro bot.</div>
     </div>
 
-    <!-- Chatbase Agent Bubble -->
     <button id="chat-bubble-btn"
         class="fixed bottom-4 right-4 z-[9999] w-16 h-16 rounded-full bg-pepsiBlue text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition-all"
         aria-label="Abrir chat"
@@ -397,17 +381,17 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
     </button>
     <iframe
         id="chat-iframe"
-        src="https://www.chatbase.co/chatbot-iframe/IOgCBWRXBPOCAXtMrfEzy"
+        src=""
         frameborder="0"
         class="fixed bottom-24 right-4 z-[9999] w-72 md:w-80 h-[450px] md:h-[500px] rounded-lg shadow-lg bg-white"
         style="max-height: 80vh; max-width: calc(100% - 2rem); display: none;"
     ></iframe>
 
     <script>
-        // Theme management
+
         const isDarkMode = localStorage.getItem('darkMode') !== null 
             ? localStorage.getItem('darkMode') === 'true' 
-            : true; // Default to dark mode
+            : true;
 
         function updateTheme() {
             const logo = document.querySelector('h1');
@@ -455,10 +439,8 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Apply initial theme
         updateTheme();
 
-        // Listen for theme changes from other pages
         window.addEventListener('storage', (e) => {
             if (e.key === 'darkMode') {
                 const newDarkMode = e.newValue === 'true';
@@ -468,7 +450,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
 
-        // Mostrar popup de recuperación al hacer clic
         document.addEventListener('DOMContentLoaded', function() {
             const forgotLink = document.getElementById('forgotLink');
             if (forgotLink) {
@@ -480,12 +461,10 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     document.getElementById('forgotSuccess').classList.add('hidden');
                     document.getElementById('forgotSuccess').innerText = '';
                     document.querySelector('#forgotForm input[name="usuario"]').value = '';
-                    // Desmarcar radios
                     document.querySelectorAll('#forgotForm input[name="metodo"]').forEach(r => r.checked = false);
                 });
             }
 
-            // Nuevo: envío automático al hacer clic en método
             function enviarRecuperacion(metodo) {
                 const form = document.getElementById('forgotForm');
                 const usuario = form.usuario.value.trim();
@@ -540,13 +519,11 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 enviarRecuperacion('email');
             });
 
-            // Eliminar el submit del forgotForm
             document.getElementById('forgotForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                // No hacer nada aquí
+
             });
 
-            // Enviar código de recuperación por AJAX
             document.getElementById('recoveryCodeForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const usuario = this.usuario.value.trim();
@@ -576,7 +553,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 .then(r => r.json())
                 .then(resp => {
                     if (resp.ok) {
-                        // Cerrar popup de código y abrir el de cambio de contraseña
                         document.getElementById('recoveryCodePopup').style.display = 'none';
                         document.getElementById('resetPasswordPopup').style.display = 'flex';
                         document.querySelector('#resetPasswordForm input[name="usuario"]').value = usuario;
@@ -596,8 +572,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     errorDiv.classList.remove('hidden');
                 });
             });
-
-            // Enviar nueva contraseña por AJAX
             document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const usuario = this.usuario.value.trim();
@@ -655,7 +629,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
 
-        // Help bubble logic
         document.addEventListener('DOMContentLoaded', function() {
             const helpBtn = document.getElementById('helpBubbleBtn');
             const helpPopup = document.getElementById('helpBubblePopup');
@@ -686,7 +659,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
 
-        // Chat bubble logic
         const chatBtn = document.getElementById('chat-bubble-btn');
         const chatIframe = document.getElementById('chat-iframe');
         let chatOpen = false;
@@ -710,12 +682,10 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
         chatIframe.addEventListener('click', e => e.stopPropagation());
         chatBtn.addEventListener('click', e => e.stopPropagation());
 
-        // ...existing code...
     </script>
-<!-- Chatbase widget -->
 <script>
   window.chatbaseConfig = {
-    chatbotId: "Qw3nQwWw3nQwWw3nQwWw3nQwWw",
+    chatbotId: "",
   }
 </script>
 <script src="https://www.chatbase.co/embed.min.js" id="chatbase-script" defer></script>
@@ -725,9 +695,6 @@ if (!$ya_logueado && $_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="flex flex-col items-center justify-between space-y-8">
             <div class="text-4xl font-bold blink-pepsi">PEPSI</div>
             <div class="flex flex-wrap justify-center gap-8 text-sm uppercase tracking-wider">
-                <a href="#" class="text-white hover:text-pepsiBlue transition-colors">Condiciones de uso</a>
-                <a href="#" class="text-white hover:text-pepsiBlue transition-colors">Bases legales</a>
-                <a href="#" class="text-white hover:text-pepsiBlue transition-colors">Privacidad</a>
                 <a href="contact.php" class="text-white hover:text-pepsiBlue transition-colors">Contacto</a>
                 <a href="faq.php" class="text-white hover:text-pepsiBlue transition-colors">FAQ</a>
                 <a href="sitemap.php" class="text-white hover:text-pepsiBlue transition-colors">Mapa del sitio</a>
