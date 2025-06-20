@@ -62,10 +62,9 @@
             </div>
         </div>
     </main>
-    <!-- Chatbase widget -->
     <script>
       window.chatbaseConfig = {
-        chatbotId: "Qw3nQwWw3nQwWw3nQwWw3nQwWw3nQwWw",
+        chatbotId: "",
       }
     </script>
     <script src="https://www.chatbase.co/embed.min.js" id="chatbase-script" defer></script>
