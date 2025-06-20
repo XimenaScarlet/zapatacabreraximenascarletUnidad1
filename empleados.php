@@ -70,7 +70,6 @@ if (!isset($_SESSION['empleado_id'])) {
             color: #4a3b8a;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 80px;
