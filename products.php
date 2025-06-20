@@ -206,7 +206,6 @@ $productos = [
             transform: scale(1.1) translateY(-5px);
         }
 
-        /* Light mode adjustments */
         body:not(.dark-mode) {
             background-color: #ffffff;
             color: #000000;
@@ -242,15 +241,12 @@ $productos = [
     </style>
 </head>
 <body class="bg-black text-white font-sans min-h-screen">
-    <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-sm border-b border-white/10 transition-colors duration-300">
         <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
-            <!-- Logo -->
             <div class="flex-shrink-0">
                 <a href="index.php" class="text-3xl font-bold text-white tracking-wider">PEPSI</a>
             </div>
 
-            <!-- Navigation Links - Centered -->
             <div id="navLinks" class="hidden md:flex items-center justify-center flex-1 space-x-6 transition-all duration-300">
                 <a href="index.php" class="text-white hover:text-pepsiBlue transition-colors">Inicio</a>
                 <a href="contact.php" class="text-white hover:text-pepsiBlue transition-colors">Contacto</a>
@@ -258,12 +254,10 @@ $productos = [
                 <a href="privacy.php" class="text-white hover:text-pepsiBlue transition-colors">Privacidad</a>
             </div>
 
-            <!-- Searchbar in nav, hidden by default, placed inline with nav links -->
             <div id="navSearchbarContainer" class="hidden md:flex items-center ml-2 transition-all duration-300" style="max-width:320px;flex:0 0 auto;display:none;">
                 <input id="navSearchInput" type="text" placeholder="Buscar productos..." class="w-full px-4 py-2 rounded-full border border-pepsiBlue focus:outline-none focus:border-pepsiBlue text-black" style="font-size:1.1rem; min-width:180px;">
             </div>
 
-            <!-- Right Icons -->
             <div class="flex items-center space-x-4 ml-4">
                 <button id="searchIconBtn" class="text-white hover:text-pepsiBlue transition-colors" aria-label="Buscar productos">
                     <i class="fas fa-search text-xl"></i>
@@ -274,7 +268,6 @@ $productos = [
                 <button class="text-white hover:text-pepsiBlue transition-colors" id="darkModeToggle">
                     <i class="fas fa-moon text-xl"></i>
                 </button>
-                <!-- Mobile Menu Button -->
                 <button class="md:hidden text-white hover:text-pepsiBlue transition-colors" id="mobileMenuButton">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
@@ -282,12 +275,10 @@ $productos = [
         </nav>
     </header>
 
-    <!-- Breadcrumb dinámico -->
     <nav aria-label="breadcrumb" class="w-full flex justify-center pt-24 pb-2">
         <ol class="flex items-center space-x-2 text-lg font-semibold breadcrumb-list" id="breadcrumb-list"></ol>
     </nav>
     <script>
-        // Breadcrumb real basado en historial de navegación (máx 8)
         (function() {
             const maxBreadcrumb = 8;
             const storageKey = 'pepsi_breadcrumb_history';
@@ -337,12 +328,9 @@ $productos = [
             breadcrumbList.innerHTML = html;
         })();
     </script>
-
-    <!-- Main Content -->
     <div class="pt-24 pb-16">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row gap-8">
-                <!-- Sidebar -->
                 <aside class="md:w-64 flex-shrink-0">
                     <div class="sidebar rounded-lg border border-white/10 p-6 sticky top-24 bg-black/20">
                         <h2 class="text-xl font-semibold mb-4">Categorías</h2>
@@ -371,11 +359,9 @@ $productos = [
                     </div>
                 </aside>
 
-                <!-- Product Grid -->
                 <div class="flex-1">
                     <div class="products-container">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
-                        <!-- Product 1 -->
                         <div class="product-card rounded-xl p-6 flex flex-col">
                             <div class="relative mb-4 product-image-container">
                                 <img src="https://www.pepsico.com/images/default-source/products-brands/pepsi_12oz.png" 
@@ -402,7 +388,6 @@ $productos = [
                             </div>
                         </div>
 
-                        <!-- Product 2 -->
                         <div class="product-card rounded-xl p-6 flex flex-col">
                             <div class="relative mb-4">
                                 <img src="https://www.pepsico.com/images/default-source/products-brands/pepsi_zero_sugar.png" 
@@ -429,7 +414,6 @@ $productos = [
                             </div>
                         </div>
 
-                        <!-- Product 3 -->
                         <div class="product-card rounded-xl p-6 flex flex-col">
                             <div class="relative mb-4">
                                 <img src="https://www.pepsico.com/images/default-source/products-brands/pepsi_zero_sugar.png" 
@@ -456,7 +440,6 @@ $productos = [
                             </div>
                         </div>
 
-                        <!-- Product 4 -->
                         <div class="product-card rounded-xl p-6 flex flex-col">
                             <div class="relative mb-4">
                                 <img src="https://www.pepsico.com/images/default-source/products-brands/pepsi_wild_cherry.png" 
@@ -483,7 +466,6 @@ $productos = [
                             </div>
                         </div>
 
-                        <!-- Product 5 -->
                         <div class="product-card rounded-xl p-6 flex flex-col">
                             <div class="relative mb-4">
                                 <img src="https://www.pepsico.com/images/default-source/products-brands/pepsi_lime.png" 
@@ -510,7 +492,6 @@ $productos = [
                             </div>
                         </div>
 
-                        <!-- Product 6 -->
                         <div class="product-card rounded-xl p-6 flex flex-col">
                             <div class="relative mb-4">
                                 <img src="https://www.pepsico.com/images/default-source/products-brands/pepsi_mango.png" 
@@ -543,7 +524,6 @@ $productos = [
     </div>
 
     <script>
-        // Theme management
         const darkModeToggle = document.getElementById('darkModeToggle');
         const moonIcon = darkModeToggle.querySelector('.fa-moon');
         let isDarkMode = localStorage.getItem('darkMode') !== null 
@@ -555,17 +535,14 @@ $productos = [
             const header = document.querySelector('header');
             const navLinks = document.querySelectorAll('a:not(.category-link), button:not(.category-link)');
 
-            // Update header
             header.classList.toggle('bg-black/90', isDarkMode);
             header.classList.toggle('bg-white/90', !isDarkMode);
             header.classList.toggle('border-white/10', isDarkMode);
             header.classList.toggle('border-black/10', !isDarkMode);
 
-            // Update icon
             moonIcon.classList.toggle('fa-moon', isDarkMode);
             moonIcon.classList.toggle('fa-sun', !isDarkMode);
 
-            // Update navigation
             navLinks.forEach(link => {
                 if (!link.classList.contains('text-pepsiBlue')) {
                     link.classList.toggle('text-white', isDarkMode);
@@ -574,7 +551,6 @@ $productos = [
             });
         }
 
-        // Apply initial theme
         updateTheme();
 
         darkModeToggle.addEventListener('click', () => {
@@ -583,7 +559,6 @@ $productos = [
             updateTheme();
         });
 
-        // Category filtering
         const categoryLinks = document.querySelectorAll('.category-link');
         const productCards = document.querySelectorAll('.product-card');
 
@@ -617,7 +592,6 @@ $productos = [
             });
         });
 
-        // Mobile menu
         const mobileMenuButton = document.getElementById('mobileMenuButton');
         const mobileMenu = document.querySelector('.md\\:flex.items-center');
 
@@ -625,13 +599,10 @@ $productos = [
             mobileMenu.classList.toggle('hidden');
         });
 
-        // --- SEARCHBAR FUNCTIONALITY ---
         const searchIconBtn = document.getElementById('searchIconBtn');
         const navSearchbarContainer = document.getElementById('navSearchbarContainer');
         const navSearchInput = document.getElementById('navSearchInput');
-        // ...productCards already declared above...
 
-        // Asegura que el searchbar esté oculto al cargar
         document.addEventListener('DOMContentLoaded', function() {
             navSearchbarContainer.classList.add('hidden');
             navSearchbarContainer.style.display = 'none';
@@ -660,14 +631,12 @@ $productos = [
             }
         });
 
-        // Cerrar searchbar al presionar ESC
         navSearchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSearchbar();
             }
         });
 
-        // Cerrar searchbar al hacer click fuera
         document.addEventListener('mousedown', function(e) {
             if (
                 !navSearchbarContainer.contains(e.target) &&
@@ -696,14 +665,12 @@ $productos = [
             });
         });
 
-        // Cerrar searchbar al presionar ESC
         navSearchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeSearchbar();
             }
         });
 
-        // Cerrar searchbar al hacer click fuera
         document.addEventListener('mousedown', function(e) {
             if (
                 !navSearchbarContainer.contains(e.target) &&
@@ -715,7 +682,6 @@ $productos = [
             }
         });
 
-        // Al cargar, asegúrate de que los links estén centrados si searchbar está oculto
         document.addEventListener('DOMContentLoaded', function() {
             if (navSearchbarContainer.classList.contains('hidden')) {
                 navLinks.classList.remove('mr-4');
@@ -724,25 +690,16 @@ $productos = [
             }
         });
 
-        // Chatbase widget
         window.chatbaseConfig = {
-          chatbotId: "Qw3nQwWw3nQwWw3nQwWw3nQwWw",
+          chatbotId: "",
         }
     </script>
-<!-- Chatbase widget -->
-<script>
-  window.chatbaseConfig = {
-    chatbotId: "Qw3nQwWw3nQwWw3nQwWw3nQwWw",
-  }
-</script>
 <script src="https://www.chatbase.co/embed.min.js" id="chatbase-script" defer></script>
 
 <footer class="bg-black text-white py-8 mt-12">
     <div class="container mx-auto px-6">
         <div class="flex flex-col items-center justify-between space-y-8">
-            <!-- Logo -->
             <div class="text-4xl font-bold blink-pepsi">PEPSI</div>
-            <!-- Social Links -->
             <div class="flex space-x-8">
                 <a href="#" class="text-white hover:text-pepsiBlue transition-colors">
                     <i class="fab fa-twitter text-2xl"></i>
@@ -754,16 +711,13 @@ $productos = [
                     <i class="fab fa-instagram text-2xl"></i>
                 </a>
             </div>
-            <!-- Footer Links -->
+
             <div class="flex flex-wrap justify-center gap-8 text-sm uppercase tracking-wider">
-                <a href="#" class="text-white hover:text-pepsiBlue transition-colors">Condiciones de uso</a>
-                <a href="#" class="text-white hover:text-pepsiBlue transition-colors">Bases legales</a>
                 <a href="privacy.php" class="text-white hover:text-pepsiBlue transition-colors">Privacidad</a>
                 <a href="contact.php" class="text-white hover:text-pepsiBlue transition-colors">Contacto</a>
                 <a href="faq.php" class="text-white hover:text-pepsiBlue transition-colors">FAQ</a>
                 <a href="sitemap.php" class="text-white hover:text-pepsiBlue transition-colors">Mapa del sitio</a>
             </div>
-            <!-- Copyright -->
             <div class="text-sm text-gray-500">
                 © 2022 PEPSICO, INC.
             </div>
